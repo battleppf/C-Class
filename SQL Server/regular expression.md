@@ -12,7 +12,7 @@
             operate.BindDataGridView(dgv,cmd);
         }
 
-        ***
+***
         这里主要只出现了
         'like %%' 
         这种类型的正则表达式，其余的内容之后再不断地完善
