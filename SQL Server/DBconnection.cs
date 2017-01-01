@@ -12,7 +12,7 @@ namespace PMSClass
         public static SqlConnection MyConnection(string IP)
         {
             return new SqlConnection(
-                @"server=" +  IP   + ";database=sjfx;User ID=sa;pwd="
+                @"server=" +  IP   + ";database=sjfx;User ID=sa;pwd=" 
                 );
         }
     }
