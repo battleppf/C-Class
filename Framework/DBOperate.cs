@@ -1,6 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.SqlClient;
+using System.Data;
+using System.Windows.Forms;
+
 namespace PMSClass
 {
-    class DBOperate
+    class DBOperate//DBOperate 类，实例化后可用于控件和数据库数据的操作
     {
         public static string IP;
         SqlConnection conn = DBConnection.MyConnection(IP);
@@ -28,7 +37,7 @@ namespace PMSClass
             return ds;
         }
 
-        public void BindDataGridView(DataGridView dgv,string sql)
+        public void BindDataGridView(DataGridView dgv,string sql)//绑定DataGridView控件
         {
             SqlDataAdapter sda = new SqlDataAdapter(sql,conn);
             DataSet ds = new DataSet();
@@ -37,7 +46,7 @@ namespace PMSClass
             ds.Dispose();
         }
 
-        public int OperateDate(string strSql)
+        public int OperateDate(string strSql)//执行语句，返回值
         {
             conn.Open();
             MessageBox.Show(strSql);
@@ -48,7 +57,7 @@ namespace PMSClass
             return i;
         }
 
-        public bool hasRow(string strSql)
+        public bool hasRow(string strSql)  //判断查询结果是否为空
         {
             conn.Open();
             SqlCommand cmd = new SqlCommand(strSql,conn);
@@ -58,12 +67,14 @@ namespace PMSClass
             return (s!=null);
         }
 
-        public int insertUnit(string name,string number,int rank)
+        public int insertUnit(string name,string number,int rank)//to be continue
         {
             return 0;
         }
 
-        public void insertCombobox(ComboBox box,string cmd)
+        //=======================================================//         Bind data to Combobox
+        //=======================================================//
+        public void insertCombobox(ComboBox box,string cmd)//绑定数据到combobox
         {
             SqlDataAdapter myDa=new SqlDataAdapter(cmd,conn);
             DataSet myDs=new DataSet();
@@ -72,7 +83,7 @@ namespace PMSClass
             box.DisplayMember = "单位名称";
         }
 
-        public void insertCombobox(ComboBox box, string cmd,string name)
+        public void insertCombobox(ComboBox box, string cmd,string name)//重载，name表示显示的列名
         {
             SqlDataAdapter myDa = new SqlDataAdapter(cmd, conn);
             DataSet myDs = new DataSet();
@@ -80,8 +91,23 @@ namespace PMSClass
             box.DataSource = myDs.Tables[0];
             box.DisplayMember = name;
         }
+        //=======================================================//
+        //=======================================================//
+        
+        public string getTestTimeByTestID(string id)        //这里是时间格式调整！
+        {
+            string cmd = "select CONVERT(varchar(100),测试时间,23) from B_考核列表 where 1=1 ";
+            //string cmd = "select  测试时间 from B_考核列表 where 1=1 ";
+            cmd += "and 考核编号="+id;
 
-        public string unitNameIndexFind(string name)
+            SqlDataAdapter da = new SqlDataAdapter(cmd, conn);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            return ds.Tables[0].Rows[0][0].ToString();
+        }
+
+        public string unitNameIndexFind(string name)//通过单位名称来寻找单位的ID，返回查找到列表的最坐上格子的数据
         {
             string cmd = "select 单位序列号 from F_单位列表 where 单位名称='"+name+"'";
 
@@ -91,7 +117,7 @@ namespace PMSClass
             return ds.Tables[0].Rows[0][0].ToString();
         }
 
-        public string getSubjectNameById(string subjectId)
+        public string getSubjectNameById(string subjectId)//类似于上面
         {
             string cmd = "select 课目名称 from B_考核课目目录 where 1=1 ";
             cmd += "and 课目编号=" + subjectId;
@@ -102,9 +128,9 @@ namespace PMSClass
             return ds.Tables[0].Rows[0][0].ToString();
         }
 
-        public int getPoint(string id)
+        public int getPoint(string id)//
         {
-            string cmd = "select 量化得分 from A_基本信息 where 士兵证号='"+id+"'";
+            string cmd = "select 量化得分 from A_基本信息 where 证号='"+id+"'";
             SqlDataAdapter da = new SqlDataAdapter(cmd,conn);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -149,19 +175,6 @@ namespace PMSClass
             return ds.Tables[0].Rows[0][0].ToString();
         }
 
-        public string getTestTimeByTestID(string id)//这里是时间格式调整！
-        {
-            string cmd = "select CONVERT(varchar(100),测试时间,23) from B_考核列表 where 1=1 ";
-            //string cmd = "select  测试时间 from B_考核列表 where 1=1 ";
-            cmd += "and 考核编号="+id;
-
-            SqlDataAdapter da = new SqlDataAdapter(cmd, conn);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-
-            return ds.Tables[0].Rows[0][0].ToString();
-        }
-
         public string getTestTimeByTestId(string id)
         {
             string cmd = "select 测试时间 from B_考核列表 where 1=1 ";
@@ -177,7 +190,7 @@ namespace PMSClass
         public DataSet getChartByPersonID(string id,string subject)
         {
             string cmd = "select 考核成绩 from B_考核成绩 where 1=1 ";
-            cmd += "and 考核编号=" + subject + " and 士兵证号='" + id + "'";
+            cmd += "and 考核编号=" + subject + " and 证号='" + id + "'";
 
             SqlDataAdapter da = new SqlDataAdapter(cmd, conn);
             DataSet ds = new DataSet();
