@@ -1,4 +1,4 @@
-'class subjectOperator
+class subjectOperator
 {
         //The main point of this function is the using of the identity_number of sql server
         public void subjectInsert(string name,string type1,string type2,int jige,int lianghao,int youxiu,string parameter)
@@ -16,4 +16,4 @@
         //
         
         
-}'
+}
