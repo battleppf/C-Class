@@ -10,10 +10,28 @@ class subjectOperator
             MessageBox.Show(cmd);
             operate.OperateDate(cmd);
         }
-        
-        //
+       
         //grammar of sql
-        //
         
+        //delete
+        public void unitDelete(int num)
+        {
+            string cmd = "delete from F_单位列表 where 单位编码=" + num.ToString();
+            operate.OperateDate(cmd);
+            MessageBox.Show("删除成功！");
+        }
         
+        //update
+        public void unitRectify(int id,string name,string number,int rank)
+        {
+            string cmd = "update F_单位列表 set 单位名称='" + name + "',单位序列号='" + number + "',单位级别=" + rank.ToString()+" where 单位编码="+id.ToString();
+            operate.OperateDate(cmd);
+        }
+        
+        //insert
+        public void treeInsert(string father,string self)
+        {
+            string cmd = "insert F_单位树(父节点,单位序列号) values('"+father+"','"+self+"')";
+            operate.OperateDate(cmd);
+        }
 }
