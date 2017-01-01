@@ -93,9 +93,13 @@ namespace PMSClass
         }
         //=======================================================//
         //=======================================================//
-        
-        public string getTestTimeByTestID(string id)        //这里是时间格式调整！
+       
+        public string getTestTimeByTestID(string id)       
         {
+            //这里是时间格式调整！
+            //convert(data_type(length),data_to_be_converted,style)
+            //第一个规定目标数据类型，第二个代表要转换的列,第三个代表的是转化出来的风格，风格详见↓
+            //To get more details->   http://www.cnblogs.com/190196539/archive/2011/02/11/1951374.html
             string cmd = "select CONVERT(varchar(100),测试时间,23) from B_考核列表 where 1=1 ";
             //string cmd = "select  测试时间 from B_考核列表 where 1=1 ";
             cmd += "and 考核编号="+id;
@@ -104,7 +108,30 @@ namespace PMSClass
             DataSet ds = new DataSet();
             da.Fill(ds);
 
-            return ds.Tables[0].Rows[0][0].ToString();
+            return ds.Tables[0].Rows[0][0].ToString();//由于可以选出多行，所以这里还需要限定返回值是第几个，但是由于数据库设计时的唯一性约束，所以 
+             /*
+            Style ID	Style 格式
+            100 或者 0	mon dd yyyy hh:miAM （或者 PM）
+            101	mm/dd/yy
+            102	yy.mm.dd
+            103	dd/mm/yy
+            104	dd.mm.yy
+            105	dd-mm-yy
+            106	dd mon yy
+            107	Mon dd, yy
+            108	hh:mm:ss
+            109 或者 9	mon dd yyyy hh:mi:ss:mmmAM（或者 PM）
+            110	mm-dd-yy
+            111	yy/mm/dd
+            112	yymmdd
+            113 或者 13	dd mon yyyy hh:mm:ss:mmm(24h)
+            114	hh:mi:ss:mmm(24h)
+            120 或者 20	yyyy-mm-dd hh:mi:ss(24h)
+            121 或者 21	yyyy-mm-dd hh:mi:ss.mmm(24h)
+            126	yyyy-mm-ddThh:mm:ss.mmm（没有空格）
+            130	dd mon yyyy hh:mi:ss:mmmAM
+            131	dd/mm/yy hh:mi:ss:mmmAM
+            */
         }
 
         public string unitNameIndexFind(string name)//通过单位名称来寻找单位的ID，返回查找到列表的最坐上格子的数据
